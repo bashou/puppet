@@ -23,7 +23,7 @@
 	path = puppet/modules/rvm
 	url = git://github.com/example42/puppet-rvm.git
 [submodule "puppet/modules/liquidprompt"]
-	path = liquidprompt
+	path = puppet/modules/liquidprompt
 	url = git://github.com/Aethylred/puppet-liquidprompt.git
 [submodule "puppet/modules/php"]
 	path = php
