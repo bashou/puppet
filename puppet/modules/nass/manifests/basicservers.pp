@@ -53,10 +53,22 @@ class nass::basicservers {
     owner   => 'root',
     group   => 'root',
   }
-  file { ['/space/logs', '/space/secure']:
+  file { ['/space/logs', '/space/logs/www']:
     ensure          => directory,
     owner           => 'dosu',
     group           => 'dosu',
+  }
+  file { ['/space/www', '/space/secure']:
+    ensure          => directory,
+    owner           => 'dosu',
+    group           => 'dosu',
+  }
+  file { '/space/secure/htpasswd':
+    owner => 'dosu',
+    group => 'dosu',
+    mode => '0644',
+    source => 'puppet:///modules/nass/web/htpasswd',
+    require => File['/space/secure'];
   }
 
 }

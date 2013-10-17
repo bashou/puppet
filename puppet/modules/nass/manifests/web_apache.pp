@@ -1,8 +1,9 @@
-class nass::webservers {
+class nass::web_apache {
   class {'apache':
     mpm_module => 'prefork',
+    default_vhost => false,
   }
-  apache::listen{ '80':}
+  apache::listen{ '8080':}
   class {'apache::mod::php':}
   apache::mod { 'expires':}
   apache::mod { 'headers':}
@@ -30,22 +31,8 @@ class nass::webservers {
       entry  => 'Date/date.timezone',
       value  => 'Europe/Paris';
   }
+
   User <| title == dosu |>
   User <| title == dosu |> {groups +> "www-data"}
   User <| title == www-data |>
-  User <| title == www-data |> {groups +> "dosu"}
-
-  file { ['/space/www', '/space/logs/www']:
-    ensure          => directory,
-    owner           => 'dosu',
-    group           => 'dosu',
-  }
-
-  file { '/space/secure/htpasswd':
-    owner => 'dosu',
-    group => 'dosu',
-    mode => '0644',
-    source => 'puppet:///modules/nass/web/htpasswd',
-    require => File['/space/secure'];
-  }
 }

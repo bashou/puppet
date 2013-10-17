@@ -1,10 +1,11 @@
 class nass::websites {
-  class {'nass::webservers':}
-  class {'nass::bddservers':}
 
   case $site {
     'uploadfr':{
-      file { ['/space/www/uploadfr.com', '/space/www/uploadfr.com/images']:
+      class {'nass::web_apache':}
+      class {'nass::bddservers':}
+
+      file { ['/space/www/uploadfr.com', '/space/www/uploadfr.com/images', '/space/cache', '/space/cache/uploadfr']:
         ensure          => directory,
         owner           => 'dosu',
         group           => 'dosu',
@@ -97,6 +98,15 @@ class nass::websites {
         access_log_file      => 'a2_access_pics.uploadfr.com.log',
         error_log      => true,
         error_log_file      => 'a2_error_pics.uploadfr.com.log',
+      }
+
+      class { "nginx":
+        log_file => [
+          '/space/logs/www/ngx_access.log',
+          '/space/logs/www/ngx_errors.log',
+        ],
+        source_dir       => "puppet:///modules/nass/nginx/",
+        source_dir_purge => true, # Set to true to purge any existing file not present in $source_dir
       }
 
       mysql::db { 'chevereto_v2':
