@@ -18,7 +18,6 @@ if ! $lib_dir {
 node default {
   class {'nass::basicservers':}
   case $role {
-    'web':        { class {'nass::test':}}
-    'bdd':        { class {'nass::test':}}
+    'web':        { class {'nass::websites':}}
   }
 }

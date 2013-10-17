@@ -6,7 +6,6 @@ Vagrant.configure("2") do |config|
   config.vm.network :private_network, ip: "192.168.33.11"
   config.ssh.forward_agent = true
 
-  config.vm.synced_folder "../www", "/vagrant_www"
   config.vm.synced_folder "./puppet/files", "/etc/puppet/files"  
 
   config.vm.define :perso_default do |t| 
@@ -29,14 +28,15 @@ Vagrant.configure("2") do |config|
     puppet.manifest_file = "site.pp"
     puppet.facter = { 
           "fqdn" => "fenty.nassi.me",
-          "role" => "bdd",
+          "role" => "web",
+          "site" => "uploadfr",
     }
 
     puppet.options = [
-     '--debug',
+#    '--debug',
 #     '--verbose',
 #     '--hiera_config /vagrant/ftven/puppet/manifests/hiera.yaml',
-      '--fileserverconfig /vagrant/fileserver.conf'
+    '--fileserverconfig /vagrant/puppet/fileserver.conf'
     ]
   end
 end

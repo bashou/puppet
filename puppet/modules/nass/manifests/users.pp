@@ -36,6 +36,7 @@ define nass::users (
     require => [ User[$name], Group[$group] ]
   }
 
-  #liquidprompt::user{ $name : }
+  class {'liquidprompt':}
+  liquidprompt::user{ $name : }
 
 }

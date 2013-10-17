@@ -35,23 +35,28 @@ class nass::basicservers {
             "acl":      ensure => present;
   }
   nass::users{'dosu':}
+
   class { 'nass::ssh_keys::perso':}
-  class { 'liquidprompt':}
-  liquidprompt::user{ 'dosu' : }
   class { 'hosts':
-    dynamic_mode => true,
+    dynamic_mode => false,
   }
   class { 'postfix': }
   class { 'timezone':
     timezone => 'Europe/Paris',
   }
+  sudo::directive { 'dosu':
+    content => "dosu ALL=(ALL) NOPASSWD:ALL \n", # Double quotes and newline (\n) are needed here
+  }
+
   file { ['/space']:
     ensure  => directory,
     owner   => 'root',
     group   => 'root',
   }
-  sudo::directive { 'dosu':
-    content => "dosu ALL=(ALL) NOPASSWD:ALL \n", # Double quotes and newline (\n) are needed here
+  file { ['/space/logs', '/space/secure']:
+    ensure          => directory,
+    owner           => 'dosu',
+    group           => 'dosu',
   }
 
 }
