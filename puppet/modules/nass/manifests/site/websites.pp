@@ -43,7 +43,7 @@ class nass::websites {
         add_listen      => false,
         ip              => '127.0.0.1',
         port            => '8080',
-        servername      => 'www.uploadfr.com',
+        servername      => 'adm.uploadfr.com',
         docroot         => '/space/www/uploadfr.com/current',
         aliases         => [
           { alias => '/favicon.ico', path => '/space/www/uploadfr.com/current/content/system/favicon.ico' }, 
