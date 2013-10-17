@@ -1,6 +1,6 @@
 [submodule "puppet/modules/nginx"]
 	path = puppet/modules/nginx
-	url = git://github.com/example42/puppet-nginx.git
+	url = git://github.com/bashou/puppet-nginx.git
 [submodule "puppet/modules/locales"]
 	path = puppet/modules/locales
 	url = git://github.com/netmanagers/puppet-locales.git
