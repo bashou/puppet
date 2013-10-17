@@ -12,7 +12,7 @@ define nass::users (
   }
 
   group { $group:
-    gid     => 999,
+  #  gid     => 999,
     require => User[$name],
     members => ['www-data']
   }

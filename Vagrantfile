@@ -33,7 +33,7 @@ Vagrant.configure("2") do |config|
     }
 
     puppet.options = [
-#     '--debug',
+     '--debug',
 #     '--verbose',
 #     '--hiera_config /vagrant/ftven/puppet/manifests/hiera.yaml',
       '--fileserverconfig /vagrant/fileserver.conf'

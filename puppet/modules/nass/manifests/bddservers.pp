@@ -1,6 +1,12 @@
 class nass::bddservers {
-
-	class {'mysql::server':
-		config_hash => { 'root_password' => '{md5}$1$iVtVRAt9$yE8GjqB.BY6bkA0rfOrCt1' }
-	}
+  # Installation Mysql
+  $socket = '/var/run/mysqld/mysqld.sock'
+  class { 'mysql::server':
+    root_password    => 'foo',
+    override_options => {
+      mysqld      => { socket => $socket },
+      mysqld_safe => { socket => $socket },
+      client      => { socket => $socket },
+    },
+  }
 }
