@@ -1,0 +1,1 @@
+server "own.kimsufi.kobe", :web, :master => true

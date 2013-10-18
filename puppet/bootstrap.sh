@@ -12,16 +12,16 @@ curl -L https://get.rvm.io | sudo bash -s stable
 source /etc/profile.d/rvm.sh
  
 # Install Ruby 1.9.3-125
-rvmsudo rvm install 1.9.3-p125
-rvmsudo rvm alias create default 1.9.3-p125
+rvmsudo rvm install 1.9.3-p448
+rvmsudo rvm alias create default 1.9.3-p448
  
 source /etc/profile.d/rvm.sh
  
 # Update rubygems, and pull down facter and then puppet...
-rvmsudo rvm 1.9.3-p125 do gem update --system
-rvmsudo rvm 1.9.3-p125 do gem install facter --no-ri --no-rdoc
-rvmsudo rvm 1.9.3-p125 do gem install puppet --no-ri --no-rdoc
-rvmsudo rvm 1.9.3-p125 do gem install libshadow --no-ri --no-rdoc
+rvmsudo rvm 1.9.3-p448 do gem update --system
+rvmsudo rvm 1.9.3-p448 do gem install facter --no-ri --no-rdoc
+rvmsudo rvm 1.9.3-p448 do gem install puppet --no-ri --no-rdoc
+rvmsudo rvm 1.9.3-p448 do gem install libshadow --no-ri --no-rdoc
  
 # Create necessary Puppet directories...
 sudo mkdir -p /etc/puppet /var/lib /var/log /var/run
