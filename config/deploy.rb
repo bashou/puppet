@@ -48,7 +48,7 @@ end
 namespace :puppet do
   task :default do
     # Specific RVM string for managing Puppet; may or may not match the RVM string for the application
-    set :rvm_ruby_string, '1.9.3-p448'
+    set :rvm_ruby_string, '1.9.3'
     set :rvm_type, :system
     set :user, "root"
  

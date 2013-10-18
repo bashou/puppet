@@ -12,10 +12,7 @@ class nass::basicservers {
 
   apt::source { 'dotdeb':
     location          => "http://packages.dotdeb.org",
-    release           => $lsbdistcodename ? {
-      squeeze => "squeeze",
-      wheezy => "wheezy",
-    },
+    release           => "wheezy",
     repos             => "all",
     key               => "89DF5277",
     key_server        => "subkeys.pgp.net",

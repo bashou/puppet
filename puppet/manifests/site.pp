@@ -12,12 +12,12 @@ if ! $lib_dir {
   }
 }
 
-# Setup par default
-# faite cookbook pour modifier la config du fichier postfix
+node 'kobe.nassi.me' {
 
-node default {
+  $role = "web"
+  $site = "uploadfr"
+
   class {'nass::basicservers':}
-  case $role {
-    'web':        { class {'nass::websites':}}
-  }
+  class {'nass::websites':}
+
 }
