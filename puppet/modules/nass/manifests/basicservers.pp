@@ -55,7 +55,7 @@ class nass::basicservers {
     owner           => 'dosu',
     group           => 'dosu',
   }
-  file { ['/space/www', '/space/secure']:
+  file { ['/space/www', '/space/cache', '/space/secure', '/space/secure/crons', '/space/secure/backup']:
     ensure          => directory,
     owner           => 'dosu',
     group           => 'dosu',

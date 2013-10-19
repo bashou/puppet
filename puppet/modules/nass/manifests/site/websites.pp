@@ -5,7 +5,7 @@ class nass::websites {
       class {'nass::web_apache':}
       class {'nass::bddservers':}
 
-      file { ['/space/www/uploadfr.com', '/space/cache', '/space/cache/uploadfr']:
+      file { ['/space/www/uploadfr.com', '/space/cache/uploadfr', '/space/secure/backup/uploadfr']:
         ensure          => directory,
         owner           => 'dosu',
         group           => 'dosu',
@@ -138,6 +138,27 @@ class nass::websites {
           log => '/space/logs/www/a2_*.log',
           options => [ 'daily', 'missingok', 'rotate 21', 'compress', 'delaycompress', 'notifempty', 'copytruncate' ],
           ensure => 'present';
+      }
+
+      file { '/space/secure/crons/backup_uploadfr.sh':
+        owner => 'dosu',
+        group => 'dosu',
+        mode => '0755',
+        source => 'puppet:///modules/nass/crons/backup_uploadfr.sh',
+        require => File['/space/secure'];
+      }
+
+      class {'cron':}
+      cron::job{
+        'backup_uploadfr':
+          minute => '30',
+          hour => '1',
+          date => '*',
+          month => '*',
+          weekday => '*',
+          user => 'dosu',
+          command => '/bin/bash /space/secure/crons/backup_uploadfr.sh 1>/dev/null 2>&1',
+          environment => [ 'SHELL=/bin/bash', 'PATH=/usr/local/bin:/usr/bin:/bin' ];
       }
     }
   }

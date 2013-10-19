@@ -49,3 +49,6 @@
 [submodule "puppet/modules/apache"]
 	path = puppet/modules/apache
 	url = git://github.com/bashou/puppetlabs-apache.git
+[submodule "puppet/modules/cron"]
+	path = puppet/modules/cron
+	url = http://github.com/torrancew/puppet-cron.git
