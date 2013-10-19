@@ -3,7 +3,7 @@ class nass::web_apache {
     mpm_module => 'prefork',
     default_vhost => false,
   }
-  apache::listen{ '8080':}
+
   class {'apache::mod::php':}
   apache::mod { 'expires':}
   apache::mod { 'headers':}

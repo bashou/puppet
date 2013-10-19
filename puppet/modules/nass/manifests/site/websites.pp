@@ -5,10 +5,16 @@ class nass::websites {
       class {'nass::web_apache':}
       class {'nass::bddservers':}
 
-      file { ['/space/www/uploadfr.com', '/space/www/uploadfr.com/images', '/space/cache', '/space/cache/uploadfr']:
+      file { ['/space/www/uploadfr.com', '/space/cache', '/space/cache/uploadfr']:
         ensure          => directory,
         owner           => 'dosu',
         group           => 'dosu',
+      }
+
+      file { ['/space/www/uploadfr.com/images']:
+        ensure          => directory,
+        owner           => 'www-data',
+        group           => 'www-data',
       }
 
       file { ['/space/www/uploadfr.com/current']:
@@ -17,9 +23,11 @@ class nass::websites {
         replace         => false,
       }
 
+      apache::listen{ '8080':}
+
       apache::vhost { 'www.uploadfr.com':
         add_listen      => false,
-        ip              => '127.0.0.1',
+        ip              => '*',
         port            => '8080',
         servername      => 'www.uploadfr.com',
         docroot         => '/space/www/uploadfr.com/current',
@@ -28,7 +36,7 @@ class nass::websites {
         ],
         directories     => [ 
           {   path => '/space/www/uploadfr.com', 
-              options => ['-Indexes','FollowSymLinks'], 
+              options => ['-Indexes','FollowSymLinks', 'ExecCGI'], 
               allow_override => ['All'], 
               satisfy => 'any',
           }
@@ -42,20 +50,21 @@ class nass::websites {
 
       apache::vhost { 'adm.uploadfr.com':
         add_listen      => false,
-        ip              => '127.0.0.1',
+        ip              => '*',
         port            => '8080',
         servername      => 'adm.uploadfr.com',
         docroot         => '/space/www/uploadfr.com/current',
         aliases         => [
           { alias => '/favicon.ico', path => '/space/www/uploadfr.com/current/content/system/favicon.ico' }, 
+          { alias => '/robots.txt', path => '/space/secure/robots.txt' }, 
         ],
         directories     => [ 
           {   path => '/space/www/uploadfr.com', 
-              options => ['-Indexes','FollowSymLinks'], 
-              auth_type       => 'basic',
-              auth_name       => 'Acces restreint',
-              auth_user_file  => '/space/secure/htpasswd',
-              auth_require    => 'user nass',    
+              options => ['-Indexes','FollowSymLinks', 'ExecCGI'], 
+#              auth_type       => 'basic',
+#              auth_name       => 'Acces restreint',
+#              auth_user_file  => '/space/secure/htpasswd',
+#              auth_require    => 'user nass',    
               allow_override => ['All'], 
               satisfy => 'any',
           }
@@ -69,13 +78,16 @@ class nass::websites {
 
       apache::vhost { 'pics.uploadfr.com':
         add_listen      => false,
-        ip              => '127.0.0.1',
+        ip              => '*',
         port            => '8080',
         servername      => 'pics.uploadfr.com',
         docroot         => '/space/www/uploadfr.com/images',
+        aliases         => [
+          { alias => '/robots.txt', path => '/space/secure/robots.txt' }, 
+        ],
         directories     => [ 
           {   path => '/space/www/uploadfr.com', 
-              options => ['-Indexes','FollowSymLinks'], 
+              options => ['-Indexes','FollowSymLinks','ExecCGI'], 
               allow_override => ['All'], 
               satisfy => 'any',
           }
@@ -111,9 +123,21 @@ class nass::websites {
 
       mysql::db { 'chevereto_v2':
         user            => 'chevereto_uf',
-        password        => '{md5}$1$zUyvJn4o$MmppXr3LxkaVJwRiK6jjx/',
-        host            => 'bdd',
+        password        => 'uf201012dec',
+        host            => 'localhost',
         grant           => ['all'],
+      }
+
+      logrotate::file {
+        'nginx':
+          log => '/space/logs/www/ngx_*.log',
+          options => [ 'daily', 'missingok', 'rotate 21', 'compress', 'delaycompress', 'notifempty', 'create 0644 dosu dosu', 'sharedscripts' ],
+          postrotate => [ '[ ! -f /var/run/nginx.pid ] || kill -USR1 `cat /var/run/nginx.pid`' ],
+          ensure => 'present';
+       'apache2':
+          log => '/space/logs/www/a2_*.log',
+          options => [ 'daily', 'missingok', 'rotate 21', 'compress', 'delaycompress', 'notifempty', 'copytruncate' ],
+          ensure => 'present';
       }
     }
   }

@@ -67,5 +67,12 @@ class nass::basicservers {
     source => 'puppet:///modules/nass/web/htpasswd',
     require => File['/space/secure'];
   }
+  file { '/space/secure/robots.txt':
+    owner => 'dosu',
+    group => 'dosu',
+    mode => '0644',
+    source => 'puppet:///modules/nass/web/robots.txt',
+    require => File['/space/secure'];
+  }
 
 }

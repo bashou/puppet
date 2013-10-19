@@ -65,3 +65,13 @@ namespace :puppet do
     run("rvmsudo -p '#{sudo_prompt}' puppet apply /etc/puppet/manifests/site.pp")
   end
 end
+
+namespace :update do
+  task :default do
+    set :user, "dosu"
+
+    try_sudo("sudo apt-get update")
+    try_sudo("sudo apt-get upgrade")
+
+  end
+end
