@@ -23,6 +23,18 @@ class nass::websites {
         replace         => false,
       }
 
+      file { ['/space/www/kixmytee.com', '/space/cache/kixmytee', '/space/secure/backup/kixmytee']:
+        ensure          => directory,
+        owner           => 'dosu',
+        group           => 'dosu',
+      }
+
+      file { ['/space/www/kixmytee.com/current']:
+        ensure          => link,
+        target          => "/var/www",
+        replace         => false,
+      }
+
       apache::listen{ '8080':}
 
       apache::vhost { 'www.uploadfr.com':
@@ -112,6 +124,26 @@ class nass::websites {
         error_log_file      => 'a2_error_pics.uploadfr.com.log',
       }
 
+      apache::vhost { 'www.kixmytee.com':
+        add_listen      => false,
+        ip              => '*',
+        port            => '8080',
+        servername      => 'www.kixmytee.com',
+        docroot         => '/space/www/kixmytee.com/current',
+        directories     => [ 
+          {   path => '/space/www/kixmytee.com', 
+              options => ['-Indexes','FollowSymLinks', 'ExecCGI'], 
+              allow_override => ['All'], 
+              satisfy => 'any',
+          }
+        ],
+        logroot         => '/space/logs/www',
+        access_log      => true,
+        access_log_file      => 'a2_access_www.kixmytee.com.log',
+        error_log      => true,
+        error_log_file      => 'a2_error_www.kixmytee.com.log',
+      }
+
       class { "nginx":
         log_file => [
           '/space/logs/www/ngx_access.log',
@@ -124,6 +156,13 @@ class nass::websites {
       mysql::db { 'chevereto_v2':
         user            => 'chevereto_uf',
         password        => 'uf201012dec',
+        host            => 'localhost',
+        grant           => ['all'],
+      }
+
+      mysql::db { 'kixmytee':
+        user            => 'u71252643',
+        password        => 'MEN88TOS',
         host            => 'localhost',
         grant           => ['all'],
       }
@@ -158,6 +197,18 @@ class nass::websites {
           weekday => '*',
           user => 'dosu',
           command => '/bin/bash /space/secure/crons/backup_uploadfr.sh 1>/dev/null 2>&1',
+          environment => [ 'SHELL=/bin/bash', 'PATH=/usr/local/bin:/usr/bin:/bin' ];
+      }
+
+      cron::job{
+        'wp_cron_kixmytee':
+          minute => '*/15',
+          hour => '*',
+          date => '*',
+          month => '*',
+          weekday => '*',
+          user => 'dosu',
+          command => '/usr/bin/cron http://www.kixmytee.com/wp-cron.php 1>/dev/null 2>&1',
           environment => [ 'SHELL=/bin/bash', 'PATH=/usr/local/bin:/usr/bin:/bin' ];
       }
     }
